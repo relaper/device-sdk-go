@@ -37,7 +37,7 @@ func CommandValuesToEventDTO(cvs []*models.CommandValue, deviceName string, sour
 
 	device, exist := cache.Devices().ForName(deviceName)
 	if !exist {
-		errMsg := fmt.Sprintf("failed to find device %s", deviceName)
+		errMsg := fmt.Sprintf("设备 %s 不存在", deviceName)
 		return nil, errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 
@@ -54,7 +54,7 @@ func CommandValuesToEventDTO(cvs []*models.CommandValue, deviceName string, sour
 		// double check the CommandValue return from ProtocolDriver match device command
 		dr, ok := cache.Profiles().DeviceResource(device.ProfileName, cv.DeviceResourceName)
 		if !ok {
-			msg := fmt.Sprintf("failed to find DeviceResource %s in Device %s for CommandValue (%s)", cv.DeviceResourceName, deviceName, cv.String())
+			msg := fmt.Sprintf("设备 %s 命令 %s 属性 %s 不存在", deviceName, cv.String(), cv.DeviceResourceName)
 			lc.Error(msg)
 			return nil, errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, msg, nil)
 		}
@@ -119,7 +119,7 @@ func CommandValuesToEventDTO(cvs []*models.CommandValue, deviceName string, sour
 	}
 
 	if !transformsOK {
-		return nil, errors.NewCommonEdgeX(errors.KindServerError, fmt.Sprintf("failed to transform value for %s", deviceName), nil)
+		return nil, errors.NewCommonEdgeX(errors.KindServerError, fmt.Sprintf("转换设备 %s 数据失败", deviceName), nil)
 	}
 
 	if len(readings) > 0 {
@@ -150,7 +150,7 @@ func commandValueToReading(cv *models.CommandValue, deviceName, profileName, med
 	} else {
 		reading, err = dtos.NewSimpleReading(profileName, deviceName, cv.DeviceResourceName, cv.Type, cv.Value)
 		if err != nil {
-			return reading, errors.NewCommonEdgeX(errors.KindServerError, fmt.Sprintf("failed to transform CommandValue (%s) to Reading", cv.String()), err)
+			return reading, errors.NewCommonEdgeX(errors.KindServerError, fmt.Sprintf("转换命令值 (%s) 为读数失败", cv.String()), err)
 		}
 	}
 	// use the Origin if it was already set by ProtocolDriver implementation

@@ -92,7 +92,7 @@ func (p *profileCache) Add(profile models.DeviceProfile) errors.EdgeX {
 
 func (p *profileCache) add(profile models.DeviceProfile) errors.EdgeX {
 	if _, ok := p.deviceProfileMap[profile.Name]; ok {
-		errMsg := fmt.Sprintf("Profile %s has already existed in cache", profile.Name)
+		errMsg := fmt.Sprintf("模型 %s 已在缓存中存在", profile.Name)
 		return errors.NewCommonEdgeX(errors.KindDuplicateName, errMsg, nil)
 	}
 
@@ -143,7 +143,7 @@ func (p *profileCache) RemoveByName(name string) errors.EdgeX {
 func (p *profileCache) removeByName(name string) errors.EdgeX {
 	_, ok := p.deviceProfileMap[name]
 	if !ok {
-		errMsg := fmt.Sprintf("failed to find Profile %s in cache", name)
+		errMsg := fmt.Sprintf("在缓存中查找模型 %s 失败", name)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 
@@ -205,7 +205,7 @@ func (p *profileCache) ResourceOperation(profileName string, resourceName string
 
 func (p *profileCache) verifyProfileExists(profileName string) errors.EdgeX {
 	if _, ok := p.deviceProfileMap[profileName]; !ok {
-		errMsg := fmt.Sprintf("failed to find Profile %s in cache", profileName)
+		errMsg := fmt.Sprintf("在缓存中查找模型 %s 失败", profileName)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 	return nil

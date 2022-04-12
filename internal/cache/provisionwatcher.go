@@ -78,7 +78,7 @@ func (p *provisionWatcherCache) Add(watcher models.ProvisionWatcher) errors.Edge
 
 func (p *provisionWatcherCache) add(watcher models.ProvisionWatcher) errors.EdgeX {
 	if _, ok := p.pwMap[watcher.Name]; ok {
-		errMsg := fmt.Sprintf("ProvisionWatcher %s has already existed in cache", watcher.Name)
+		errMsg := fmt.Sprintf("ProvisionWatcher %s 已在缓存中存在", watcher.Name)
 		return errors.NewCommonEdgeX(errors.KindDuplicateName, errMsg, nil)
 	}
 
@@ -108,7 +108,7 @@ func (p *provisionWatcherCache) RemoveByName(name string) errors.EdgeX {
 func (p *provisionWatcherCache) removeByName(name string) errors.EdgeX {
 	_, ok := p.pwMap[name]
 	if !ok {
-		errMsg := fmt.Sprintf("failed to find ProvisionWatcher %s in cache", name)
+		errMsg := fmt.Sprintf("在缓存中查找 ProvisionWatcher %s 失败", name)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 
@@ -119,7 +119,7 @@ func (p *provisionWatcherCache) removeByName(name string) errors.EdgeX {
 // UpdateAdminState updates the ProvisionWatcher admin state in cache by name.
 func (p *provisionWatcherCache) UpdateAdminState(name string, state models.AdminState) errors.EdgeX {
 	if state != models.Locked && state != models.Unlocked {
-		return errors.NewCommonEdgeX(errors.KindContractInvalid, "invalid AdminState", nil)
+		return errors.NewCommonEdgeX(errors.KindContractInvalid, "非法 AdminState", nil)
 	}
 
 	p.mutex.Lock()
@@ -127,7 +127,7 @@ func (p *provisionWatcherCache) UpdateAdminState(name string, state models.Admin
 
 	_, ok := p.pwMap[name]
 	if !ok {
-		errMsg := fmt.Sprintf("failed to find ProvisionWatcher %s in cache", name)
+		errMsg := fmt.Sprintf("在缓存中查找 ProvisionWatcher %s 失败", name)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 

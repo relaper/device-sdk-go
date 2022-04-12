@@ -21,7 +21,7 @@ func (s *DeviceService) AddDeviceAutoEvent(deviceName string, event models.AutoE
 	found := false
 	device, ok := cache.Devices().ForName(deviceName)
 	if !ok {
-		msg := fmt.Sprintf("failed to find device %s in cache", deviceName)
+		msg := fmt.Sprintf("查找设备缓存 %s 失败", deviceName)
 		s.LoggingClient.Error(msg)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, msg, nil)
 	}
@@ -41,7 +41,7 @@ func (s *DeviceService) AddDeviceAutoEvent(deviceName string, event models.AutoE
 		device.AutoEvents = append(device.AutoEvents, event)
 		err := cache.Devices().Update(device)
 		if err != nil {
-			s.LoggingClient.Errorf("failed to update device %s with AutoEvent change", deviceName)
+			s.LoggingClient.Errorf("更新设备 %s 事件失败", deviceName)
 			return err
 		}
 	}
@@ -54,7 +54,7 @@ func (s *DeviceService) AddDeviceAutoEvent(deviceName string, event models.AutoE
 func (s *DeviceService) RemoveDeviceAutoEvent(deviceName string, event models.AutoEvent) error {
 	device, ok := cache.Devices().ForName(deviceName)
 	if !ok {
-		msg := fmt.Sprintf("failed to find device %s cannot in cache", deviceName)
+		msg := fmt.Sprintf("查找设备缓存 %s 失败", deviceName)
 		s.LoggingClient.Error(msg)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, msg, nil)
 	}

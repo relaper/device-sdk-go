@@ -34,7 +34,7 @@ func UpdateLastConnected(name string, lc logger.LoggingClient, dc interfaces.Dev
 	req := requests.NewUpdateDeviceRequest(device)
 	_, err := dc.Update(context.Background(), []requests.UpdateDeviceRequest{req})
 	if err != nil {
-		lc.Errorf("failed to update LastConnected for Device %s in Core Metadata: %v", name, err)
+		lc.Errorf("在元数据服务更新设备 %s LastConnected 失败: %v", name, err)
 	}
 }
 
@@ -47,7 +47,7 @@ func UpdateOperatingState(name string, state string, lc logger.LoggingClient, dc
 	req := requests.NewUpdateDeviceRequest(device)
 	_, err := dc.Update(context.Background(), []requests.UpdateDeviceRequest{req})
 	if err != nil {
-		lc.Errorf("failed to update OperatingState for Device %s in Core Metadata: %v", name, err)
+		lc.Errorf("在元数据服务更新设备 %s OperatingState 失败: %v", name, err)
 	}
 }
 

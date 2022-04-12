@@ -25,13 +25,13 @@ import (
 func UpdateProfile(profileRequest requests.DeviceProfileRequest, lc logger.LoggingClient) errors.EdgeX {
 	_, ok := cache.Profiles().ForName(profileRequest.Profile.Name)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to find profile %s", profileRequest.Profile.Name)
+		errMsg := fmt.Sprintf("查找模型失败 %s", profileRequest.Profile.Name)
 		return errors.NewCommonEdgeX(errors.KindInvalidId, errMsg, nil)
 	}
 
 	err := cache.Profiles().Update(dtos.ToDeviceProfileModel(profileRequest.Profile))
 	if err != nil {
-		errMsg := fmt.Sprintf("failed to update profile %s", profileRequest.Profile.Name)
+		errMsg := fmt.Sprintf("更新模型失败 %s", profileRequest.Profile.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -50,7 +50,7 @@ func AddDevice(addDeviceRequest requests.AddDeviceRequest, dic *di.Container) er
 
 	edgexErr = cache.Devices().Add(device)
 	if edgexErr != nil {
-		errMsg := fmt.Sprintf("failed to add device %s", device.Name)
+		errMsg := fmt.Sprintf("添加模型 %s 失败", device.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, edgexErr)
 	}
 	lc.Debugf("device %s added", device.Name)
@@ -60,7 +60,7 @@ func AddDevice(addDeviceRequest requests.AddDeviceRequest, dic *di.Container) er
 	if err == nil {
 		lc.Debugf("Invoked driver.AddDevice callback for %s", device.Name)
 	} else {
-		errMsg := fmt.Sprintf("driver.AddDevice callback failed for %s", device.Name)
+		errMsg := fmt.Sprintf("设备 %s driver.AddDevice 回调失败", device.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -82,7 +82,7 @@ func UpdateDevice(updateDeviceRequest requests.UpdateDeviceRequest, dic *di.Cont
 			req := requests.NewAddDeviceRequest(dtos.FromDeviceModelToDTO(newDevice))
 			return AddDevice(req, dic)
 		} else {
-			errMsg := fmt.Sprintf("failed to find device %s", *updateDeviceRequest.Device.ServiceName)
+			errMsg := fmt.Sprintf("查找设备 %s 失败", *updateDeviceRequest.Device.ServiceName)
 			return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 		}
 	}
@@ -99,7 +99,7 @@ func UpdateDevice(updateDeviceRequest requests.UpdateDeviceRequest, dic *di.Cont
 
 	edgexErr = cache.Devices().Update(device)
 	if edgexErr != nil {
-		errMsg := fmt.Sprintf("failed to update device %s", device.Name)
+		errMsg := fmt.Sprintf("更新设备 %s 失败", device.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, edgexErr)
 	}
 	lc.Debugf("device %s updated", device.Name)
@@ -109,7 +109,7 @@ func UpdateDevice(updateDeviceRequest requests.UpdateDeviceRequest, dic *di.Cont
 	if err == nil {
 		lc.Debugf("Invoked driver.UpdateDevice callback for %s", device.Name)
 	} else {
-		errMsg := fmt.Sprintf("driver.UpdateDevice callback failed for %s", device.Name)
+		errMsg := fmt.Sprintf("设备 %s driver.UpdateDevice 回调失败", device.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -132,14 +132,14 @@ func DeleteDevice(name string, dic *di.Container) errors.EdgeX {
 		lc.Debugf("stopping AutoEvents for device %s", device.Name)
 		container.ManagerFrom(dic.Get).StopForDevice(device.Name)
 	} else {
-		errMsg := fmt.Sprintf("failed to find device %s", name)
+		errMsg := fmt.Sprintf("查找设备 %s 失败", name)
 		return errors.NewCommonEdgeX(errors.KindInvalidId, errMsg, nil)
 	}
 
 	// remove the device in cache
 	edgexErr := cache.Devices().RemoveByName(name)
 	if edgexErr != nil {
-		errMsg := fmt.Sprintf("failed to remove device %s", device.Name)
+		errMsg := fmt.Sprintf("删除设备 %s 失败", device.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, edgexErr)
 	}
 	lc.Debugf("Removed device: %s", device.Name)
@@ -149,7 +149,7 @@ func DeleteDevice(name string, dic *di.Container) errors.EdgeX {
 	if err == nil {
 		lc.Debugf("Invoked driver.RemoveDevice callback for %s", device.Name)
 	} else {
-		errMsg := fmt.Sprintf("driver.RemoveDevice callback failed for %s", device.Name)
+		errMsg := fmt.Sprintf("设备 %s driver.RemoveDevice 回调失败", device.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -178,7 +178,7 @@ func AddProvisionWatcher(addProvisionWatcherRequest requests.AddProvisionWatcher
 
 	edgexErr = cache.ProvisionWatchers().Add(provisionWatcher)
 	if edgexErr != nil {
-		errMsg := fmt.Sprintf("failed to add provision watcher %s", provisionWatcher.Name)
+		errMsg := fmt.Sprintf("添加 provision watcher %s 失败", provisionWatcher.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, edgexErr)
 	}
 
@@ -198,7 +198,7 @@ func UpdateProvisionWatcher(updateProvisionWatcherRequest requests.UpdateProvisi
 			req := requests.NewAddProvisionWatcherRequest(dtos.FromProvisionWatcherModelToDTO(newProvisionWatcher))
 			return AddProvisionWatcher(req, lc, dic)
 		} else {
-			errMsg := fmt.Sprintf("failed to find provision watcher %s", *updateProvisionWatcherRequest.ProvisionWatcher.ServiceName)
+			errMsg := fmt.Sprintf("查找 provision watcher %s 失败", *updateProvisionWatcherRequest.ProvisionWatcher.ServiceName)
 			return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 		}
 	}
@@ -214,7 +214,7 @@ func UpdateProvisionWatcher(updateProvisionWatcherRequest requests.UpdateProvisi
 
 	edgexErr = cache.ProvisionWatchers().Update(provisionWatcher)
 	if edgexErr != nil {
-		errMsg := fmt.Sprintf("failed to update provision watcher %s", provisionWatcher.Name)
+		errMsg := fmt.Sprintf("更新 provision watcher %s 失败", provisionWatcher.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, edgexErr)
 	}
 
@@ -225,7 +225,7 @@ func UpdateProvisionWatcher(updateProvisionWatcherRequest requests.UpdateProvisi
 func DeleteProvisionWatcher(name string, lc logger.LoggingClient) errors.EdgeX {
 	err := cache.ProvisionWatchers().RemoveByName(name)
 	if err != nil {
-		errMsg := fmt.Sprintf("failed to remove provision watcher %s", name)
+		errMsg := fmt.Sprintf("删除 provision watcher %s 失败", name)
 		return errors.NewCommonEdgeX(errors.KindInvalidId, errMsg, err)
 	}
 
@@ -241,7 +241,7 @@ func UpdateDeviceService(updateDeviceServiceRequest requests.UpdateDeviceService
 	// so if the request's service name is inconsistent with device service name
 	// we should not update it.
 	if ds.Name != *updateDeviceServiceRequest.Service.Name {
-		errMsg := fmt.Sprintf("failed to identify device service %s", *updateDeviceServiceRequest.Service.Name)
+		errMsg := fmt.Sprintf("鉴别驱动 %s 失败", *updateDeviceServiceRequest.Service.Name)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 
@@ -259,7 +259,7 @@ func updateAssociatedProfile(profileName string, dic *di.Container) errors.EdgeX
 
 	res, err := dpc.DeviceProfileByName(context.Background(), profileName)
 	if err != nil {
-		errMsg := fmt.Sprintf("failed to retrieve profile %s from metadata", profileName)
+		errMsg := fmt.Sprintf("从元数据服务获取模型 %s 失败", profileName)
 		return errors.NewCommonEdgeX(errors.KindInvalidId, errMsg, err)
 	}
 
@@ -267,14 +267,14 @@ func updateAssociatedProfile(profileName string, dic *di.Container) errors.EdgeX
 	if !exist {
 		err = cache.Profiles().Add(dtos.ToDeviceProfileModel(res.Profile))
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to add profile %s", profileName)
+			errMsg := fmt.Sprintf("添加模型 %s 失败", profileName)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		return nil
 	}
 	err = cache.Profiles().Update(dtos.ToDeviceProfileModel(res.Profile))
 	if err != nil {
-		errMsg := fmt.Sprintf("failed to to update profile %s in cache, using the original one", profileName)
+		errMsg := fmt.Sprintf("在缓存中更新模型 %s 失败，使用旧数据", profileName)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 

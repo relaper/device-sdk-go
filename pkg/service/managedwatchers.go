@@ -25,20 +25,20 @@ import (
 func (s *DeviceService) AddProvisionWatcher(watcher models.ProvisionWatcher) (string, error) {
 	if pw, ok := cache.ProvisionWatchers().ForName(watcher.Name); ok {
 		return pw.Id,
-			errors.NewCommonEdgeX(errors.KindDuplicateName, fmt.Sprintf("name conflicted, ProvisionWatcher %s exists", watcher.Name), nil)
+			errors.NewCommonEdgeX(errors.KindDuplicateName, fmt.Sprintf("ProvisionWatcher %s 已存在", watcher.Name), nil)
 	}
 
 	_, ok := cache.Profiles().ForName(watcher.ProfileName)
 	if !ok {
 		res, err := s.edgexClients.DeviceProfileClient.DeviceProfileByName(context.Background(), watcher.ProfileName)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to find Profile %s for provision watcher %s", watcher.ProfileName, watcher.Name)
+			errMsg := fmt.Sprintf("查找 provision watcher %s 的模型 %s 失败", watcher.ProfileName, watcher.Name)
 			s.LoggingClient.Error(errMsg)
 			return "", err
 		}
 		err = cache.Profiles().Add(dtos.ToDeviceProfileModel(res.Profile))
 		if err != nil {
-			return "", errors.NewCommonEdgeX(errors.KindServerError, fmt.Sprintf("failed to cache the profile %s", res.Profile.Name), err)
+			return "", errors.NewCommonEdgeX(errors.KindServerError, fmt.Sprintf("缓存模型 %s 失败", res.Profile.Name), err)
 		}
 	}
 	watcher.ServiceName = s.ServiceName
@@ -48,7 +48,7 @@ func (s *DeviceService) AddProvisionWatcher(watcher models.ProvisionWatcher) (st
 	ctx := context.WithValue(context.Background(), common.CorrelationHeader, uuid.NewString())
 	res, err := s.edgexClients.ProvisionWatcherClient.Add(ctx, []requests.AddProvisionWatcherRequest{req})
 	if err != nil {
-		s.LoggingClient.Errorf("failed to add ProvisionWatcher to Core Metadata: %v", watcher.Name, err)
+		s.LoggingClient.Errorf("在核心元数据服务添加 ProvisionWatcher %s 失败: %v", watcher.Name, err)
 		return "", err
 	}
 
@@ -64,7 +64,7 @@ func (s *DeviceService) ProvisionWatchers() []models.ProvisionWatcher {
 func (s *DeviceService) GetProvisionWatcherByName(name string) (models.ProvisionWatcher, error) {
 	pw, ok := cache.ProvisionWatchers().ForName(name)
 	if !ok {
-		msg := fmt.Sprintf("failed to find ProvisionWatcher %s in cache", name)
+		msg := fmt.Sprintf("查找ProvisionWatcher %s 缓存失败", name)
 		s.LoggingClient.Error(msg)
 		return models.ProvisionWatcher{}, errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, msg, nil)
 	}
@@ -76,7 +76,7 @@ func (s *DeviceService) GetProvisionWatcherByName(name string) (models.Provision
 func (s *DeviceService) RemoveProvisionWatcher(name string) error {
 	pw, ok := cache.ProvisionWatchers().ForName(name)
 	if !ok {
-		msg := fmt.Sprintf("failed to find ProvisionWatcher %s in cache", name)
+		msg := fmt.Sprintf("查找ProvisionWatcher %s 缓存失败", name)
 		s.LoggingClient.Error(msg)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, msg, nil)
 	}
@@ -85,7 +85,7 @@ func (s *DeviceService) RemoveProvisionWatcher(name string) error {
 	ctx := context.WithValue(context.Background(), common.CorrelationHeader, uuid.NewString())
 	_, err := s.edgexClients.ProvisionWatcherClient.DeleteProvisionWatcherByName(ctx, name)
 	if err != nil {
-		s.LoggingClient.Errorf("failed to delete ProvisionWatcher %s in Core Metadata", name)
+		s.LoggingClient.Errorf("在核心元服务删除 ProvisionWatcher %s 失败", name)
 		return err
 	}
 
@@ -97,7 +97,7 @@ func (s *DeviceService) RemoveProvisionWatcher(name string) error {
 func (s *DeviceService) UpdateProvisionWatcher(watcher models.ProvisionWatcher) error {
 	_, ok := cache.ProvisionWatchers().ForName(watcher.Name)
 	if !ok {
-		msg := fmt.Sprintf("failed to find ProvisionWatcher %s in cache", watcher.Name)
+		msg := fmt.Sprintf("查找ProvisionWatcher %s 缓存失败", watcher.Name)
 		s.LoggingClient.Error(msg)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, msg, nil)
 	}
@@ -108,7 +108,7 @@ func (s *DeviceService) UpdateProvisionWatcher(watcher models.ProvisionWatcher) 
 	ctx := context.WithValue(context.Background(), common.CorrelationHeader, uuid.NewString())
 	_, err := s.edgexClients.ProvisionWatcherClient.Update(ctx, []requests.UpdateProvisionWatcherRequest{req})
 	if err != nil {
-		s.LoggingClient.Errorf("failed to update ProvisionWatcher %s in Core Metadata: %v", watcher.Name, err)
+		s.LoggingClient.Errorf("在核心元数据服务更新 ProvisionWatcher %s 失败： %v", watcher.Name, err)
 		return err
 	}
 

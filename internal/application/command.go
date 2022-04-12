@@ -57,23 +57,23 @@ func CommandHandler(isRead bool, sendEvent bool, correlationID string, vars map[
 	// check device service AdminState
 	ds := container.DeviceServiceFrom(dic.Get)
 	if ds.AdminState == models.Locked {
-		return res, errors.NewCommonEdgeX(errors.KindServiceLocked, "service locked", nil)
+		return res, errors.NewCommonEdgeX(errors.KindServiceLocked, "驱动被锁定", nil)
 	}
 
 	// check provided device exists
 	deviceKey := vars[common.Name]
 	device, ok := cache.Devices().ForName(deviceKey)
 	if !ok {
-		return res, errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, fmt.Sprintf("device %s not found", deviceKey), nil)
+		return res, errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, fmt.Sprintf("设备 %s 不存在", deviceKey), nil)
 	}
 
 	// check device's AdminState
 	if device.AdminState == models.Locked {
-		return res, errors.NewCommonEdgeX(errors.KindServiceLocked, fmt.Sprintf("device %s locked", device.Name), nil)
+		return res, errors.NewCommonEdgeX(errors.KindServiceLocked, fmt.Sprintf("设备 %s 被锁定", device.Name), nil)
 	}
 	// check device's OperatingState
 	if device.OperatingState == models.Down {
-		return res, errors.NewCommonEdgeX(errors.KindServiceLocked, fmt.Sprintf("device %s OperatingState is DOWN", device.Name), nil)
+		return res, errors.NewCommonEdgeX(errors.KindServiceLocked, fmt.Sprintf("设备 %s 操作状态为 DOWN", device.Name), nil)
 	}
 	// the device service will perform some operations(e.g. update LastConnected timestamp,
 	// push returning event to core-data) after a device is successfully interacted with if
@@ -114,12 +114,12 @@ func CommandHandler(isRead bool, sendEvent bool, correlationID string, vars map[
 func (c *CommandProcessor) ReadDeviceResource() (res *dtos.Event, e errors.EdgeX) {
 	dr, ok := cache.Profiles().DeviceResource(c.device.ProfileName, c.sourceName)
 	if !ok {
-		errMsg := fmt.Sprintf("deviceResource %s not found", c.sourceName)
+		errMsg := fmt.Sprintf("设备属性 %s 不存在", c.sourceName)
 		return res, errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 	// check deviceResource is not write-only
 	if dr.Properties.ReadWrite == common.ReadWrite_W {
-		errMsg := fmt.Sprintf("deviceResource %s is marked as write-only", dr.Name)
+		errMsg := fmt.Sprintf("设备属性 %s 为只写", dr.Name)
 		return res, errors.NewCommonEdgeX(errors.KindNotAllowed, errMsg, nil)
 	}
 
@@ -145,14 +145,14 @@ func (c *CommandProcessor) ReadDeviceResource() (res *dtos.Event, e errors.EdgeX
 	driver := container.ProtocolDriverFrom(c.dic.Get)
 	results, err := driver.HandleReadCommands(c.device.Name, c.device.Protocols, reqs)
 	if err != nil {
-		errMsg := fmt.Sprintf("error reading DeviceResourece %s for %s", dr.Name, c.device.Name)
+		errMsg := fmt.Sprintf("读取设备 %s 属性 %s 失败", dr.Name, c.device.Name)
 		return res, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
 	// convert CommandValue to Event
 	res, e = transformer.CommandValuesToEventDTO(results, c.device.Name, dr.Name, c.dic)
 	if e != nil {
-		return res, errors.NewCommonEdgeX(errors.KindServerError, "failed to convert CommandValue to Event", e)
+		return res, errors.NewCommonEdgeX(errors.KindServerError, "转换命令为事件失败", e)
 	}
 
 	return
@@ -161,18 +161,18 @@ func (c *CommandProcessor) ReadDeviceResource() (res *dtos.Event, e errors.EdgeX
 func (c *CommandProcessor) ReadDeviceCommand() (res *dtos.Event, e errors.EdgeX) {
 	dc, ok := cache.Profiles().DeviceCommand(c.device.ProfileName, c.sourceName)
 	if !ok {
-		errMsg := fmt.Sprintf("deviceCommand %s not found", c.sourceName)
+		errMsg := fmt.Sprintf("命令 %s 不存在", c.sourceName)
 		return res, errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 	// check deviceCommand is not write-only
 	if dc.ReadWrite == common.ReadWrite_W {
-		errMsg := fmt.Sprintf("deviceCommand %s is marked as write-only", dc.Name)
+		errMsg := fmt.Sprintf("命令 %s 为只写", dc.Name)
 		return res, errors.NewCommonEdgeX(errors.KindNotAllowed, errMsg, nil)
 	}
 	// check ResourceOperation count does not exceed MaxCmdOps defined in configuration
 	configuration := container.ConfigurationFrom(c.dic.Get)
 	if len(dc.ResourceOperations) > configuration.Device.MaxCmdOps {
-		errMsg := fmt.Sprintf("GET command %s exceed device %s MaxCmdOps (%d)", dc.Name, c.device.Name, configuration.Device.MaxCmdOps)
+		errMsg := fmt.Sprintf("读取命令 %s 超出设备 %s 最大操作数 (%d)", dc.Name, c.device.Name, configuration.Device.MaxCmdOps)
 		return res, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 
@@ -186,7 +186,7 @@ func (c *CommandProcessor) ReadDeviceCommand() (res *dtos.Event, e errors.EdgeX)
 		// check the deviceResource in ResourceOperation actually exist
 		dr, ok := cache.Profiles().DeviceResource(c.device.ProfileName, drName)
 		if !ok {
-			errMsg := fmt.Sprintf("deviceResource %s in GET commnd %s for %s not defined", drName, dc.Name, c.device.Name)
+			errMsg := fmt.Sprintf("设备 %s 属性 %s 在读取命令 %s 中未定义", c.device.Name, drName, dc.Name)
 			return res, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 		}
 
@@ -205,14 +205,14 @@ func (c *CommandProcessor) ReadDeviceCommand() (res *dtos.Event, e errors.EdgeX)
 	driver := container.ProtocolDriverFrom(c.dic.Get)
 	results, err := driver.HandleReadCommands(c.device.Name, c.device.Protocols, reqs)
 	if err != nil {
-		errMsg := fmt.Sprintf("error reading DeviceCommand %s for %s", dc.Name, c.device.Name)
+		errMsg := fmt.Sprintf("设备 %s 读取命令 %s 失败", dc.Name, c.device.Name)
 		return res, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
 	// convert CommandValue to Event
 	res, e = transformer.CommandValuesToEventDTO(results, c.device.Name, dc.Name, c.dic)
 	if e != nil {
-		return res, errors.NewCommonEdgeX(errors.KindServerError, "failed to transform CommandValue to Event", e)
+		return res, errors.NewCommonEdgeX(errors.KindServerError, "转换命令未事件失败", e)
 	}
 
 	return
@@ -221,12 +221,12 @@ func (c *CommandProcessor) ReadDeviceCommand() (res *dtos.Event, e errors.EdgeX)
 func (c *CommandProcessor) WriteDeviceResource() (e errors.EdgeX) {
 	dr, ok := cache.Profiles().DeviceResource(c.device.ProfileName, c.sourceName)
 	if !ok {
-		errMsg := fmt.Sprintf("deviceResource %s not found", c.sourceName)
+		errMsg := fmt.Sprintf("属性 %s 不存在", c.sourceName)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 	// check deviceResource is not read-only
 	if dr.Properties.ReadWrite == common.ReadWrite_R {
-		errMsg := fmt.Sprintf("deviceResource %s is marked as read-only", dr.Name)
+		errMsg := fmt.Sprintf("属性 %s 为只读", dr.Name)
 		return errors.NewCommonEdgeX(errors.KindNotAllowed, errMsg, nil)
 	}
 
@@ -239,7 +239,7 @@ func (c *CommandProcessor) WriteDeviceResource() (e errors.EdgeX) {
 		if dr.Properties.DefaultValue != "" {
 			v = dr.Properties.DefaultValue
 		} else {
-			errMsg := fmt.Sprintf("deviceResource %s not found in request body and no default value defined", dr.Name)
+			errMsg := fmt.Sprintf("属性 %s 值未在请求中指定，并且无默认值", dr.Name)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 		}
 	}
@@ -247,7 +247,7 @@ func (c *CommandProcessor) WriteDeviceResource() (e errors.EdgeX) {
 	// create CommandValue
 	cv, e := createCommandValueFromDeviceResource(dr, v)
 	if e != nil {
-		return errors.NewCommonEdgeX(errors.KindServerError, "failed to create CommandValue", e)
+		return errors.NewCommonEdgeX(errors.KindServerError, "创建命令值失败", e)
 	}
 
 	// prepare CommandRequest
@@ -267,7 +267,7 @@ func (c *CommandProcessor) WriteDeviceResource() (e errors.EdgeX) {
 	if configuration.Device.DataTransform {
 		e = transformer.TransformWriteParameter(cv, dr.Properties)
 		if e != nil {
-			return errors.NewCommonEdgeX(errors.KindContractInvalid, "failed to transform set parameter", e)
+			return errors.NewCommonEdgeX(errors.KindContractInvalid, "转换设置参数失败", e)
 		}
 	}
 
@@ -275,7 +275,7 @@ func (c *CommandProcessor) WriteDeviceResource() (e errors.EdgeX) {
 	driver := container.ProtocolDriverFrom(c.dic.Get)
 	err := driver.HandleWriteCommands(c.device.Name, c.device.Protocols, reqs, []*sdkModels.CommandValue{cv})
 	if err != nil {
-		errMsg := fmt.Sprintf("error writing DeviceResourece %s for %s", dr.Name, c.device.Name)
+		errMsg := fmt.Sprintf("设置设备 %s 属性 %s 失败", c.device.Name, dr.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -285,18 +285,18 @@ func (c *CommandProcessor) WriteDeviceResource() (e errors.EdgeX) {
 func (c *CommandProcessor) WriteDeviceCommand() errors.EdgeX {
 	dc, ok := cache.Profiles().DeviceCommand(c.device.ProfileName, c.sourceName)
 	if !ok {
-		errMsg := fmt.Sprintf("deviceCommand %s not found", c.sourceName)
+		errMsg := fmt.Sprintf("命令 %s 不存在", c.sourceName)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 	// check deviceCommand is not read-only
 	if dc.ReadWrite == common.ReadWrite_R {
-		errMsg := fmt.Sprintf("deviceCommand %s is marked as read-only", dc.Name)
+		errMsg := fmt.Sprintf("命令 %s 为只读", dc.Name)
 		return errors.NewCommonEdgeX(errors.KindNotAllowed, errMsg, nil)
 	}
 	// check ResourceOperation count does not exceed MaxCmdOps defined in configuration
 	configuration := container.ConfigurationFrom(c.dic.Get)
 	if len(dc.ResourceOperations) > configuration.Device.MaxCmdOps {
-		errMsg := fmt.Sprintf("SET command %s exceed device %s MaxCmdOps (%d)", dc.Name, c.device.Name, configuration.Device.MaxCmdOps)
+		errMsg := fmt.Sprintf("设置命令 %s 超出设备 %s 最大操作次数 (%d)", dc.Name, c.device.Name, configuration.Device.MaxCmdOps)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 
@@ -310,7 +310,7 @@ func (c *CommandProcessor) WriteDeviceCommand() errors.EdgeX {
 		// check the deviceResource in ResourceOperation actually exist
 		dr, ok := cache.Profiles().DeviceResource(c.device.ProfileName, drName)
 		if !ok {
-			errMsg := fmt.Sprintf("deviceResource %s in SET commnd %s for %s not defined", drName, dc.Name, c.device.Name)
+			errMsg := fmt.Sprintf("属性 %s 在设备 %s 命令 %s 中未定义", c.device.Name, drName, dc.Name)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 		}
 
@@ -322,7 +322,7 @@ func (c *CommandProcessor) WriteDeviceCommand() errors.EdgeX {
 			} else if dr.Properties.DefaultValue != "" {
 				value = dr.Properties.DefaultValue
 			} else {
-				errMsg := fmt.Sprintf("deviceResource %s not found in request body and no default value defined", dr.Name)
+				errMsg := fmt.Sprintf("属性 %s 未在请求中指定，并且无默认值", dr.Name)
 				return errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 			}
 		}
@@ -343,7 +343,7 @@ func (c *CommandProcessor) WriteDeviceCommand() errors.EdgeX {
 		if err == nil {
 			cvs = append(cvs, cv)
 		} else {
-			return errors.NewCommonEdgeX(errors.KindServerError, "failed to create CommandValue", err)
+			return errors.NewCommonEdgeX(errors.KindServerError, "创建命令值失败", err)
 		}
 	}
 
@@ -366,7 +366,7 @@ func (c *CommandProcessor) WriteDeviceCommand() errors.EdgeX {
 		if configuration.Device.DataTransform {
 			err := transformer.TransformWriteParameter(cv, dr.Properties)
 			if err != nil {
-				return errors.NewCommonEdgeX(errors.KindContractInvalid, "failed to transform set parameter", err)
+				return errors.NewCommonEdgeX(errors.KindContractInvalid, "转换设置参数失败", err)
 			}
 		}
 	}
@@ -375,7 +375,7 @@ func (c *CommandProcessor) WriteDeviceCommand() errors.EdgeX {
 	driver := container.ProtocolDriverFrom(c.dic.Get)
 	err := driver.HandleWriteCommands(c.device.Name, c.device.Protocols, reqs, cvs)
 	if err != nil {
-		errMsg := fmt.Sprintf("error writing DeviceCommand %s for %s", dc.Name, c.device.Name)
+		errMsg := fmt.Sprintf("设置设备 %s 属性 %s 失败", c.device.Name, dc.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -395,7 +395,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []string
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeStringArray, arr)
@@ -403,7 +403,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var value bool
 		value, err = strconv.ParseBool(v)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeBool, value)
@@ -411,7 +411,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []bool
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeBoolArray, arr)
@@ -419,7 +419,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n uint64
 		n, err = strconv.ParseUint(v, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeUint8, uint8(n))
@@ -429,7 +429,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		for _, u := range strArr {
 			n, err := strconv.ParseUint(strings.Trim(u, " "), 10, 8)
 			if err != nil {
-				errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+				errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 				return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 			}
 			arr = append(arr, uint8(n))
@@ -439,7 +439,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n uint64
 		n, err = strconv.ParseUint(v, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeUint16, uint16(n))
@@ -449,7 +449,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		for _, u := range strArr {
 			n, err := strconv.ParseUint(strings.Trim(u, " "), 10, 16)
 			if err != nil {
-				errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+				errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 				return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 			}
 			arr = append(arr, uint16(n))
@@ -459,7 +459,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n uint64
 		n, err = strconv.ParseUint(v, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeUint32, uint32(n))
@@ -469,7 +469,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		for _, u := range strArr {
 			n, err := strconv.ParseUint(strings.Trim(u, " "), 10, 32)
 			if err != nil {
-				errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+				errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 				return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 			}
 			arr = append(arr, uint32(n))
@@ -479,7 +479,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n uint64
 		n, err = strconv.ParseUint(v, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeUint64, n)
@@ -489,7 +489,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		for _, u := range strArr {
 			n, err := strconv.ParseUint(strings.Trim(u, " "), 10, 64)
 			if err != nil {
-				errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+				errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 				return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 			}
 			arr = append(arr, n)
@@ -499,7 +499,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n int64
 		n, err = strconv.ParseInt(v, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt8, int8(n))
@@ -507,7 +507,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []int8
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt8Array, arr)
@@ -515,7 +515,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n int64
 		n, err = strconv.ParseInt(v, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt16, int16(n))
@@ -523,7 +523,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []int16
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt16Array, arr)
@@ -531,7 +531,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n int64
 		n, err = strconv.ParseInt(v, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt32, int32(n))
@@ -539,7 +539,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []int32
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt32Array, arr)
@@ -547,7 +547,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n int64
 		n, err = strconv.ParseInt(v, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt64, n)
@@ -555,7 +555,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []int64
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt64Array, arr)
@@ -580,7 +580,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 			if err != nil {
 				break
 			} else if math.IsNaN(float64(val)) {
-				err = fmt.Errorf("fail to parse %v to float32, unexpected result %v", v, val)
+				err = fmt.Errorf("转换 %v 为浮点失败： %v", v, val)
 			} else {
 				result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeFloat32, val)
 			}
@@ -589,7 +589,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []float32
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeFloat32Array, arr)
@@ -613,7 +613,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 			if err != nil {
 				break
 			} else if math.IsNaN(val) {
-				err = fmt.Errorf("fail to parse %v to float64, unexpected result %v", v, val)
+				err = fmt.Errorf("转换 %v 为浮点失败： %v", v, val)
 			} else {
 				result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeFloat64, val)
 			}
@@ -622,14 +622,14 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []float64
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to convert set parameter %s to ValueType %s", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("转换设置参数 %s 为 数值类型 %s 失败", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeFloat64Array, arr)
 	case common.ValueTypeObject:
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeObject, value)
 	default:
-		err = errors.NewCommonEdgeX(errors.KindServerError, "unrecognized value type", nil)
+		err = errors.NewCommonEdgeX(errors.KindServerError, "不支持的数据类型", nil)
 	}
 
 	if err != nil {

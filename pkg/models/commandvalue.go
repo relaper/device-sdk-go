@@ -45,7 +45,7 @@ type CommandValue struct {
 func NewCommandValue(deviceResourceName string, valueType string, value interface{}) (*CommandValue, error) {
 	err := validate(valueType, value)
 	if err != nil {
-		return nil, errors.NewCommonEdgeX(errors.KindServerError, "failed to create CommandValue", err)
+		return nil, errors.NewCommonEdgeX(errors.KindServerError, "创建CommandValue失败", err)
 	}
 
 	return &CommandValue{
@@ -84,12 +84,12 @@ func (cv *CommandValue) String() string {
 func (cv *CommandValue) BoolValue() (bool, error) {
 	var value bool
 	if cv.Type != common.ValueTypeBool {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeBool)
+		errMsg := fmt.Sprintf("无法将 %s 类型转换为 %s", cv.Type, common.ValueTypeBool)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(bool)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("转换 %v 为 %T失败", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -99,12 +99,12 @@ func (cv *CommandValue) BoolValue() (bool, error) {
 func (cv *CommandValue) BoolArrayValue() ([]bool, error) {
 	var value []bool
 	if cv.Type != common.ValueTypeBoolArray {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeBoolArray)
+		errMsg := fmt.Sprintf("无法将 %s 类型转换为 %s", cv.Type, common.ValueTypeBoolArray)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]bool)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("转换 %v 为 %T 失败", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -114,12 +114,12 @@ func (cv *CommandValue) BoolArrayValue() ([]bool, error) {
 func (cv *CommandValue) StringValue() (string, error) {
 	var value string
 	if cv.Type != common.ValueTypeString {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeString)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeString)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(string)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("转换 %v 为 %T 失败", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -129,12 +129,12 @@ func (cv *CommandValue) StringValue() (string, error) {
 func (cv *CommandValue) StringArrayValue() ([]string, error) {
 	var value []string
 	if cv.Type != common.ValueTypeStringArray {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeStringArray)
+		errMsg := fmt.Sprintf("无法转换 %s 类型为 %s", cv.Type, common.ValueTypeStringArray)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]string)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("转换 %v 为 %T 失败", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -144,12 +144,12 @@ func (cv *CommandValue) StringArrayValue() ([]string, error) {
 func (cv *CommandValue) Uint8Value() (uint8, error) {
 	var value uint8
 	if cv.Type != common.ValueTypeUint8 {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeUint8)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeUint8)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(uint8)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("转换 %v 为 %T 失败", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -159,12 +159,12 @@ func (cv *CommandValue) Uint8Value() (uint8, error) {
 func (cv *CommandValue) Uint8ArrayValue() ([]uint8, error) {
 	var value []uint8
 	if cv.Type != common.ValueTypeUint8Array {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeUint8Array)
+		errMsg := fmt.Sprintf("无法转换 %s 类型为 %s", cv.Type, common.ValueTypeUint8Array)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]uint8)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("转换 %v 为 %T 失败", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -174,12 +174,12 @@ func (cv *CommandValue) Uint8ArrayValue() ([]uint8, error) {
 func (cv *CommandValue) Uint16Value() (uint16, error) {
 	var value uint16
 	if cv.Type != common.ValueTypeUint16 {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeUint16)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeUint16)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(uint16)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -189,12 +189,12 @@ func (cv *CommandValue) Uint16Value() (uint16, error) {
 func (cv *CommandValue) Uint16ArrayValue() ([]uint16, error) {
 	var value []uint16
 	if cv.Type != common.ValueTypeUint16Array {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeUint16Array)
+		errMsg := fmt.Sprintf("转换 %s 为 %s 失败", cv.Type, common.ValueTypeUint16Array)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]uint16)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -204,12 +204,12 @@ func (cv *CommandValue) Uint16ArrayValue() ([]uint16, error) {
 func (cv *CommandValue) Uint32Value() (uint32, error) {
 	var value uint32
 	if cv.Type != common.ValueTypeUint32 {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeUint32)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeUint32)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(uint32)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -219,12 +219,12 @@ func (cv *CommandValue) Uint32Value() (uint32, error) {
 func (cv *CommandValue) Uint32ArrayValue() ([]uint32, error) {
 	var value []uint32
 	if cv.Type != common.ValueTypeUint32Array {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeUint32Array)
+		errMsg := fmt.Sprintf("转换 %s 为 %s 失败", cv.Type, common.ValueTypeUint32Array)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]uint32)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -234,12 +234,12 @@ func (cv *CommandValue) Uint32ArrayValue() ([]uint32, error) {
 func (cv *CommandValue) Uint64Value() (uint64, error) {
 	var value uint64
 	if cv.Type != common.ValueTypeUint64 {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeUint64)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeUint64)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(uint64)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -249,12 +249,12 @@ func (cv *CommandValue) Uint64Value() (uint64, error) {
 func (cv *CommandValue) Uint64ArrayValue() ([]uint64, error) {
 	var value []uint64
 	if cv.Type != common.ValueTypeUint64Array {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeUint64Array)
+		errMsg := fmt.Sprintf("转换 %s 为 %s 失败", cv.Type, common.ValueTypeUint64Array)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]uint64)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -264,12 +264,12 @@ func (cv *CommandValue) Uint64ArrayValue() ([]uint64, error) {
 func (cv *CommandValue) Int8Value() (int8, error) {
 	var value int8
 	if cv.Type != common.ValueTypeInt8 {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeInt8)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeInt8)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(int8)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -279,12 +279,12 @@ func (cv *CommandValue) Int8Value() (int8, error) {
 func (cv *CommandValue) Int8ArrayValue() ([]int8, error) {
 	var value []int8
 	if cv.Type != common.ValueTypeInt8Array {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeInt8Array)
+		errMsg := fmt.Sprintf("转换 %s 为 %s 失败", cv.Type, common.ValueTypeInt8Array)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]int8)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -294,12 +294,12 @@ func (cv *CommandValue) Int8ArrayValue() ([]int8, error) {
 func (cv *CommandValue) Int16Value() (int16, error) {
 	var value int16
 	if cv.Type != common.ValueTypeInt16 {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeInt16)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeInt16)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(int16)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -309,12 +309,12 @@ func (cv *CommandValue) Int16Value() (int16, error) {
 func (cv *CommandValue) Int16ArrayValue() ([]int16, error) {
 	var value []int16
 	if cv.Type != common.ValueTypeInt16Array {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeInt16Array)
+		errMsg := fmt.Sprintf("转换 %s 为 %s 失败", cv.Type, common.ValueTypeInt16Array)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]int16)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -324,12 +324,12 @@ func (cv *CommandValue) Int16ArrayValue() ([]int16, error) {
 func (cv *CommandValue) Int32Value() (int32, error) {
 	var value int32
 	if cv.Type != common.ValueTypeInt32 {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeInt32)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeInt32)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(int32)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -339,12 +339,12 @@ func (cv *CommandValue) Int32Value() (int32, error) {
 func (cv *CommandValue) Int32ArrayValue() ([]int32, error) {
 	var value []int32
 	if cv.Type != common.ValueTypeInt32Array {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeInt32Array)
+		errMsg := fmt.Sprintf("转换 %s 为 %s 失败", cv.Type, common.ValueTypeInt32Array)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]int32)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -354,12 +354,12 @@ func (cv *CommandValue) Int32ArrayValue() ([]int32, error) {
 func (cv *CommandValue) Int64Value() (int64, error) {
 	var value int64
 	if cv.Type != common.ValueTypeInt64 {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeInt64)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeInt64)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(int64)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -369,12 +369,12 @@ func (cv *CommandValue) Int64Value() (int64, error) {
 func (cv *CommandValue) Int64ArrayValue() ([]int64, error) {
 	var value []int64
 	if cv.Type != common.ValueTypeInt64Array {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeInt64Array)
+		errMsg := fmt.Sprintf("转换 %s 为 %s 失败", cv.Type, common.ValueTypeInt64Array)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]int64)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -384,12 +384,12 @@ func (cv *CommandValue) Int64ArrayValue() ([]int64, error) {
 func (cv *CommandValue) Float32Value() (float32, error) {
 	var value float32
 	if cv.Type != common.ValueTypeFloat32 {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeFloat32)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeFloat32)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(float32)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -399,12 +399,12 @@ func (cv *CommandValue) Float32Value() (float32, error) {
 func (cv *CommandValue) Float32ArrayValue() ([]float32, error) {
 	var value []float32
 	if cv.Type != common.ValueTypeFloat32Array {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeFloat32Array)
+		errMsg := fmt.Sprintf("转换 %s 为 %s 失败", cv.Type, common.ValueTypeFloat32Array)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]float32)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -414,12 +414,12 @@ func (cv *CommandValue) Float32ArrayValue() ([]float32, error) {
 func (cv *CommandValue) Float64Value() (float64, error) {
 	var value float64
 	if cv.Type != common.ValueTypeFloat64 {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeFloat64)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeFloat64)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.(float64)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -429,12 +429,12 @@ func (cv *CommandValue) Float64Value() (float64, error) {
 func (cv *CommandValue) Float64ArrayValue() ([]float64, error) {
 	var value []float64
 	if cv.Type != common.ValueTypeFloat64Array {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeFloat64Array)
+		errMsg := fmt.Sprintf("转换 %s 为 %s 失败", cv.Type, common.ValueTypeFloat64Array)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]float64)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -444,12 +444,12 @@ func (cv *CommandValue) Float64ArrayValue() ([]float64, error) {
 func (cv *CommandValue) BinaryValue() ([]byte, error) {
 	var value []byte
 	if cv.Type != common.ValueTypeBinary {
-		errMsg := fmt.Sprintf("cannot convert %s to %s", cv.Type, common.ValueTypeBinary)
+		errMsg := fmt.Sprintf("转换 %s 为 %s 失败", cv.Type, common.ValueTypeBinary)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	value, ok := cv.Value.([]byte)
 	if !ok {
-		errMsg := fmt.Sprintf("failed to transfrom %v to %T", cv.Value, value)
+		errMsg := fmt.Sprintf("无法转换 %v 为 %T", cv.Value, value)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return value, nil
@@ -458,7 +458,7 @@ func (cv *CommandValue) BinaryValue() ([]byte, error) {
 // ObjectValue returns the value in object data type, and returns error if the Type is not Object.
 func (cv *CommandValue) ObjectValue() (interface{}, error) {
 	if cv.Type != common.ValueTypeObject {
-		errMsg := fmt.Sprintf("cannot convert CommandValue of %s to %s", cv.Type, common.ValueTypeObject)
+		errMsg := fmt.Sprintf("无法转换 CommandValue %s 为 %s", cv.Type, common.ValueTypeObject)
 		return nil, errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return cv.Value, nil
@@ -520,17 +520,17 @@ func validate(valueType string, value interface{}) error {
 	case common.ValueTypeBinary:
 		_, ok = value.([]byte)
 		if binary.Size(value) > MaxBinaryBytes {
-			errMsg := fmt.Sprintf("value payload exceeds limit for binary readings (%v bytes)", MaxBinaryBytes)
+			errMsg := fmt.Sprintf("数据量超出二进制读数限制(%v bytes)", MaxBinaryBytes)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 		}
 	case common.ValueTypeObject:
 		_, ok = value.(interface{})
 	default:
-		return errors.NewCommonEdgeX(errors.KindServerError, "unrecognized value type", nil)
+		return errors.NewCommonEdgeX(errors.KindServerError, "不支持的数值类型", nil)
 	}
 
 	if !ok {
-		errMsg := fmt.Sprintf("failed to convert interface value %v to Type %s", value, valueType)
+		errMsg := fmt.Sprintf("无法将 interface 数值 %v 为 %s类型", value, valueType)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return nil

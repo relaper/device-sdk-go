@@ -71,7 +71,7 @@ func (c *RestController) Secret(writer http.ResponseWriter, request *http.Reques
 	secretRequest := commonDTO.SecretRequest{}
 	err := json.NewDecoder(request.Body).Decode(&secretRequest)
 	if err != nil {
-		edgexError := errors.NewCommonEdgeX(errors.KindContractInvalid, "JSON decode failed", err)
+		edgexError := errors.NewCommonEdgeX(errors.KindContractInvalid, "解析 JSON 失败", err)
 		c.sendEdgexError(writer, request, edgexError, common.ApiSecretRoute)
 		return
 	}
@@ -79,7 +79,7 @@ func (c *RestController) Secret(writer http.ResponseWriter, request *http.Reques
 	path, secret := c.prepareSecret(secretRequest)
 
 	if err := provider.StoreSecret(path, secret); err != nil {
-		edgexError := errors.NewCommonEdgeX(errors.KindServerError, "Storing secret failed", err)
+		edgexError := errors.NewCommonEdgeX(errors.KindServerError, "保存 secret 失败", err)
 		c.sendEdgexError(writer, request, edgexError, common.ApiSecretRoute)
 		return
 	}

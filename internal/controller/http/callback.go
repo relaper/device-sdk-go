@@ -39,7 +39,7 @@ func (c *RestController) AddDevice(writer http.ResponseWriter, request *http.Req
 
 	err := json.NewDecoder(request.Body).Decode(&addDeviceRequest)
 	if err != nil {
-		edgexErr := errors.NewCommonEdgeX(errors.KindServerError, "failed to decode JSON", err)
+		edgexErr := errors.NewCommonEdgeX(errors.KindServerError, "解析 JSON 失败", err)
 		c.sendEdgexError(writer, request, edgexErr, common.ApiDeviceCallbackRoute)
 		return
 	}
@@ -60,7 +60,7 @@ func (c *RestController) UpdateDevice(writer http.ResponseWriter, request *http.
 
 	err := json.NewDecoder(request.Body).Decode(&updateDeviceRequest)
 	if err != nil {
-		edgexErr := errors.NewCommonEdgeX(errors.KindServerError, "failed to decode JSON", err)
+		edgexErr := errors.NewCommonEdgeX(errors.KindServerError, "解析 JSON 失败", err)
 		c.sendEdgexError(writer, request, edgexErr, common.ApiDeviceCallbackRoute)
 		return
 	}
@@ -82,7 +82,7 @@ func (c *RestController) UpdateProfile(writer http.ResponseWriter, request *http
 
 	err := json.NewDecoder(request.Body).Decode(&profileRequest)
 	if err != nil {
-		edgexErr = errors.NewCommonEdgeX(errors.KindServerError, "failed to decode JSON", err)
+		edgexErr = errors.NewCommonEdgeX(errors.KindServerError, "解析 JSON 失败", err)
 		c.sendEdgexError(writer, request, edgexErr, common.ApiProfileCallbackRoute)
 		return
 	}
@@ -116,7 +116,7 @@ func (c *RestController) AddProvisionWatcher(writer http.ResponseWriter, request
 
 	err := json.NewDecoder(request.Body).Decode(&addProvisionWatcherRequest)
 	if err != nil {
-		edgexErr := errors.NewCommonEdgeX(errors.KindServerError, "failed to decode JSON", err)
+		edgexErr := errors.NewCommonEdgeX(errors.KindServerError, "解析 JSON 失败", err)
 		c.sendEdgexError(writer, request, edgexErr, common.ApiWatcherCallbackRoute)
 		return
 	}
@@ -137,7 +137,7 @@ func (c *RestController) UpdateProvisionWatcher(writer http.ResponseWriter, requ
 
 	err := json.NewDecoder(request.Body).Decode(&updateProvisionWatcherRequest)
 	if err != nil {
-		edgexErr := errors.NewCommonEdgeX(errors.KindServerError, "failed to decode JSON", err)
+		edgexErr := errors.NewCommonEdgeX(errors.KindServerError, "解析 JSON 失败", err)
 		c.sendEdgexError(writer, request, edgexErr, common.ApiWatcherCallbackRoute)
 		return
 	}
@@ -158,7 +158,7 @@ func (c *RestController) UpdateDeviceService(writer http.ResponseWriter, request
 
 	err := json.NewDecoder(request.Body).Decode(&updateDeviceServiceRequest)
 	if err != nil {
-		edgexErr := errors.NewCommonEdgeX(errors.KindContractInvalid, "failed to decode JSON", err)
+		edgexErr := errors.NewCommonEdgeX(errors.KindContractInvalid, "解析 JSON 失败", err)
 		c.sendEdgexError(writer, request, edgexErr, common.ApiServiceCallbackRoute)
 		return
 	}

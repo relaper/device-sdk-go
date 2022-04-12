@@ -40,7 +40,7 @@ func TransformReadResult(cv *sdkModels.CommandValue, pv models.ResourcePropertie
 	if err != nil {
 		return errors.NewCommonEdgeXWrapper(err)
 	} else if res {
-		errMSg := fmt.Sprintf("NaN error for DeviceResource %s", cv.DeviceResourceName)
+		errMSg := fmt.Sprintf("属性 %s 为 NaN", cv.DeviceResourceName)
 		return errors.NewCommonEdgeX(errors.KindNaNError, errMSg, nil)
 	}
 
@@ -124,7 +124,7 @@ func transformBase(value interface{}, base string, read bool) (interface{}, erro
 	}
 	inRange := checkTransformedValueInRange(value, valueFloat64)
 	if !inRange {
-		errMsg := fmt.Sprintf("transformed value out of its original type (%T) range", value)
+		errMsg := fmt.Sprintf("转换数据值超出原始数据值 (%T) 范围", value)
 		return 0, errors.NewCommonEdgeX(errors.KindOverflowError, errMsg, nil)
 	}
 
@@ -156,7 +156,7 @@ func transformBase(value interface{}, base string, read bool) (interface{}, erro
 func transformScale(value interface{}, scale string, read bool) (interface{}, errors.EdgeX) {
 	s, err := strconv.ParseFloat(scale, 64)
 	if err != nil {
-		errMsg := fmt.Sprintf("the scale value %s of PropertyValue cannot be parsed to float64", scale)
+		errMsg := fmt.Sprintf("属性的缩放配置值 %s 无法转换为浮点", scale)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -191,7 +191,7 @@ func transformScale(value interface{}, scale string, read bool) (interface{}, er
 	}
 	inRange := checkTransformedValueInRange(value, valueFloat64)
 	if !inRange {
-		errMsg := fmt.Sprintf("transformed value out of its original type (%T) range", value)
+		errMsg := fmt.Sprintf("转换数据值超出原始数据值 (%T) 范围", value)
 		return 0, errors.NewCommonEdgeX(errors.KindOverflowError, errMsg, nil)
 	}
 
@@ -263,7 +263,7 @@ func transformScale(value interface{}, scale string, read bool) (interface{}, er
 func transformOffset(value interface{}, offset string, read bool) (interface{}, errors.EdgeX) {
 	o, err := strconv.ParseFloat(offset, 64)
 	if err != nil {
-		errMsg := fmt.Sprintf("the offset value %s of PropertyValue cannot be parsed to float64", offset)
+		errMsg := fmt.Sprintf("属性的偏移配置值 %s 无法转换为浮点", offset)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -298,7 +298,7 @@ func transformOffset(value interface{}, offset string, read bool) (interface{}, 
 	}
 	inRange := checkTransformedValueInRange(value, valueFloat64)
 	if !inRange {
-		errMsg := fmt.Sprintf("transformed value out of its original type (%T) range", value)
+		errMsg := fmt.Sprintf("转换数据值超出原始数据值 (%T) 范围", value)
 		return 0, errors.NewCommonEdgeX(errors.KindOverflowError, errMsg, nil)
 	}
 
@@ -372,28 +372,28 @@ func transformReadMask(value interface{}, mask string) (interface{}, errors.Edge
 	case uint8:
 		m, err := strconv.ParseUint(mask, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("the mask value %s of PropertyValue cannot be parsed to %T", mask, v)
+			errMsg := fmt.Sprintf("属性的mask配置值 %s 无法转换为 %T", mask, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		value = v & uint8(m)
 	case uint16:
 		m, err := strconv.ParseUint(mask, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("the mask value %s of PropertyValue cannot be parsed to %T", mask, v)
+			errMsg := fmt.Sprintf("属性的mask配置值 %s 无法转换为 %T", mask, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		value = v & uint16(m)
 	case uint32:
 		m, err := strconv.ParseUint(mask, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("the mask value %s of PropertyValue cannot be parsed to %T", mask, v)
+			errMsg := fmt.Sprintf("属性的mask配置值 %s 无法转换为 %T", mask, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		value = v & uint32(m)
 	case uint64:
 		m, err := strconv.ParseUint(mask, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("the mask value %s of PropertyValue cannot be parsed to %T", mask, v)
+			errMsg := fmt.Sprintf("属性的mask配置值 %s 无法转换为 %T", mask, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		value = v & m
@@ -407,7 +407,7 @@ func transformReadShift(value interface{}, shift string) (interface{}, errors.Ed
 	case uint8:
 		s, err := strconv.ParseInt(shift, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("the shift value %s of PropertyValue cannot be parsed to %T", shift, v)
+			errMsg := fmt.Sprintf("属性的位移配置值 %s 无法转换为 %T", shift, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if s > 0 {
@@ -418,7 +418,7 @@ func transformReadShift(value interface{}, shift string) (interface{}, errors.Ed
 	case uint16:
 		s, err := strconv.ParseInt(shift, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("the shift value %s of PropertyValue cannot be parsed to %T", shift, v)
+			errMsg := fmt.Sprintf("属性的位移配置值 %s 无法转换为 %T", shift, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if s > 0 {
@@ -429,7 +429,7 @@ func transformReadShift(value interface{}, shift string) (interface{}, errors.Ed
 	case uint32:
 		s, err := strconv.ParseInt(shift, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("the shift value %s of PropertyValue cannot be parsed to %T", shift, v)
+			errMsg := fmt.Sprintf("属性的位移配置值 %s 无法转换为 %T", shift, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if s > 0 {
@@ -440,7 +440,7 @@ func transformReadShift(value interface{}, shift string) (interface{}, errors.Ed
 	case uint64:
 		s, err := strconv.ParseInt(shift, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("the shift value %s of PropertyValue cannot be parsed to %T", shift, v)
+			errMsg := fmt.Sprintf("属性的位移配置值 %s 无法转换为 %T", shift, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if s > 0 {
@@ -508,7 +508,7 @@ func commandValueForTransform(cv *sdkModels.CommandValue) (interface{}, errors.E
 			return 0, errors.NewCommonEdgeXWrapper(err)
 		}
 	default:
-		return nil, errors.NewCommonEdgeX(errors.KindServerError, "unsupported ValueType for transformation", nil)
+		return nil, errors.NewCommonEdgeX(errors.KindServerError, "不支持转换的数值类型", nil)
 	}
 	return v, nil
 }
@@ -521,7 +521,7 @@ func checkAssertion(
 	dc interfaces.DeviceClient) errors.EdgeX {
 	if assertion != "" && cv.ValueToString() != assertion {
 		go sdkCommon.UpdateOperatingState(deviceName, models.Down, lc, dc)
-		errMsg := fmt.Sprintf("Assertion failed for DeviceResource %s, with value %s", cv.DeviceResourceName, cv.ValueToString())
+		errMsg := fmt.Sprintf("属性 %s 值 %s 断言失败", cv.DeviceResourceName, cv.ValueToString())
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return nil

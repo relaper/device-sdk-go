@@ -59,19 +59,19 @@ func InitDependencyClients(ctx context.Context, wg *sync.WaitGroup, startupTimer
 
 func validateClientConfig(configuration *config.ConfigurationStruct) errors.EdgeX {
 	if len(configuration.Clients[common.CoreMetaDataServiceKey].Host) == 0 {
-		return errors.NewCommonEdgeX(errors.KindContractInvalid, "fatal error; Host setting for Core Metadata client not configured", nil)
+		return errors.NewCommonEdgeX(errors.KindContractInvalid, "元数据服务客户端地址未配置", nil)
 	}
 
 	if configuration.Clients[common.CoreMetaDataServiceKey].Port == 0 {
-		return errors.NewCommonEdgeX(errors.KindContractInvalid, "fatal error; Port setting for Core Metadata client not configured", nil)
+		return errors.NewCommonEdgeX(errors.KindContractInvalid, "元数据服务客户端端口未配置", nil)
 	}
 
 	if len(configuration.Clients[common.CoreDataServiceKey].Host) == 0 {
-		return errors.NewCommonEdgeX(errors.KindContractInvalid, "fatal error; Host setting for Core Data client not configured", nil)
+		return errors.NewCommonEdgeX(errors.KindContractInvalid, "数据服务客户端地址未配置", nil)
 	}
 
 	if configuration.Clients[common.CoreDataServiceKey].Port == 0 {
-		return errors.NewCommonEdgeX(errors.KindContractInvalid, "fatal error; Port setting for Core Data client not configured", nil)
+		return errors.NewCommonEdgeX(errors.KindContractInvalid, "数据服务客户端端口未配置", nil)
 	}
 
 	// TODO: validate other settings for sanity: maxcmdops, ...

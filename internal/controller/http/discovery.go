@@ -20,21 +20,21 @@ import (
 func (c *RestController) Discovery(writer http.ResponseWriter, request *http.Request) {
 	ds := container.DeviceServiceFrom(c.dic.Get)
 	if ds.AdminState == models.Locked {
-		err := errors.NewCommonEdgeX(errors.KindServiceLocked, "service locked", nil)
+		err := errors.NewCommonEdgeX(errors.KindServiceLocked, "服务被锁定", nil)
 		c.sendEdgexError(writer, request, err, common.ApiDiscoveryRoute)
 		return
 	}
 
 	configuration := container.ConfigurationFrom(c.dic.Get)
 	if !configuration.Device.Discovery.Enabled {
-		err := errors.NewCommonEdgeX(errors.KindServiceUnavailable, "device discovery disabled", nil)
+		err := errors.NewCommonEdgeX(errors.KindServiceUnavailable, "服务发现被禁用", nil)
 		c.sendEdgexError(writer, request, err, common.ApiDiscoveryRoute)
 		return
 	}
 
 	discovery := container.ProtocolDiscoveryFrom(c.dic.Get)
 	if discovery == nil {
-		err := errors.NewCommonEdgeX(errors.KindNotImplemented, "protocolDiscovery not implemented", nil)
+		err := errors.NewCommonEdgeX(errors.KindNotImplemented, "protocolDiscovery 未实现", nil)
 		c.sendEdgexError(writer, request, err, common.ApiDiscoveryRoute)
 		return
 	}

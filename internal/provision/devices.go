@@ -36,12 +36,12 @@ func LoadDevices(path string, dic *di.Container) errors.EdgeX {
 
 	absPath, err := filepath.Abs(path)
 	if err != nil {
-		return errors.NewCommonEdgeX(errors.KindServerError, "failed to create absolute path", err)
+		return errors.NewCommonEdgeX(errors.KindServerError, "创建绝对路径失败", err)
 	}
 
 	fileInfo, err := os.ReadDir(absPath)
 	if err != nil {
-		return errors.NewCommonEdgeX(errors.KindServerError, "failed to read directory", err)
+		return errors.NewCommonEdgeX(errors.KindServerError, "读取目录失败", err)
 	}
 
 	var addDevicesReq []requests.AddDeviceRequest

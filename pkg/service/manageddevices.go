@@ -26,20 +26,20 @@ import (
 // Returns new Device id or non-nil error.
 func (s *DeviceService) AddDevice(device models.Device) (string, error) {
 	if d, ok := cache.Devices().ForName(device.Name); ok {
-		return d.Id, errors.NewCommonEdgeX(errors.KindDuplicateName, fmt.Sprintf("name conflicted, Device %s exists", device.Name), nil)
+		return d.Id, errors.NewCommonEdgeX(errors.KindDuplicateName, fmt.Sprintf("设备名称冲突, 设备 %s 已存在", device.Name), nil)
 	}
 
 	_, cacheExist := cache.Profiles().ForName(device.ProfileName)
 	if !cacheExist {
 		res, err := s.edgexClients.DeviceProfileClient.DeviceProfileByName(context.Background(), device.ProfileName)
 		if err != nil {
-			errMsg := fmt.Sprintf("failed to find Profile %s for Device %s", device.ProfileName, device.Name)
+			errMsg := fmt.Sprintf("查找设备 %s 的模型 %s 失败", device.ProfileName, device.Name)
 			s.LoggingClient.Error(errMsg)
 			return "", err
 		}
 		err = cache.Profiles().Add(dtos.ToDeviceProfileModel(res.Profile))
 		if err != nil {
-			return "", errors.NewCommonEdgeX(errors.KindServerError, fmt.Sprintf("failed to cache the profile %s", res.Profile.Name), err)
+			return "", errors.NewCommonEdgeX(errors.KindServerError, fmt.Sprintf("缓存设备模型 %s 失败", res.Profile.Name), err)
 		}
 	}
 	device.ServiceName = s.ServiceName
@@ -49,7 +49,7 @@ func (s *DeviceService) AddDevice(device models.Device) (string, error) {
 	ctx := context.WithValue(context.Background(), common.CorrelationHeader, uuid.NewString())
 	res, err := s.edgexClients.DeviceClient.Add(ctx, []requests.AddDeviceRequest{req})
 	if err != nil {
-		s.LoggingClient.Errorf("failed to add Device %s to Core Metadata: %v", device.Name, err)
+		s.LoggingClient.Errorf("在核心元数据服务添加设备 %s 失败： %v", device.Name, err)
 		return "", err
 	}
 
@@ -65,7 +65,7 @@ func (s *DeviceService) Devices() []models.Device {
 func (s *DeviceService) GetDeviceByName(name string) (models.Device, error) {
 	device, ok := cache.Devices().ForName(name)
 	if !ok {
-		msg := fmt.Sprintf("failed to find Device %s in cache", name)
+		msg := fmt.Sprintf("查找设备缓存 %s 失败", name)
 		s.LoggingClient.Error(msg)
 		return models.Device{}, errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, msg, nil)
 	}
@@ -77,7 +77,7 @@ func (s *DeviceService) GetDeviceByName(name string) (models.Device, error) {
 func (s *DeviceService) RemoveDeviceByName(name string) error {
 	device, ok := cache.Devices().ForName(name)
 	if !ok {
-		msg := fmt.Sprintf("failed to find device %s in cache", name)
+		msg := fmt.Sprintf("查找设备缓存 %s 失败", name)
 		s.LoggingClient.Error(msg)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, msg, nil)
 	}
@@ -97,7 +97,7 @@ func (s *DeviceService) RemoveDeviceByName(name string) error {
 func (s *DeviceService) UpdateDevice(device models.Device) error {
 	_, ok := cache.Devices().ForName(device.Name)
 	if !ok {
-		msg := fmt.Sprintf("failed to find Device %s in cache", device.Name)
+		msg := fmt.Sprintf("查找设备缓存 %s 失败", device.Name)
 		s.LoggingClient.Error(msg)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, msg, nil)
 	}
@@ -119,7 +119,7 @@ func (s *DeviceService) UpdateDevice(device models.Device) error {
 func (s *DeviceService) UpdateDeviceOperatingState(deviceName string, state string) error {
 	d, ok := cache.Devices().ForName(deviceName)
 	if !ok {
-		msg := fmt.Sprintf("failed to find Device %s in cache", deviceName)
+		msg := fmt.Sprintf("查找设备缓存 %s 失败", deviceName)
 		s.LoggingClient.Error(msg)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, msg, nil)
 	}

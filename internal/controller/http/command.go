@@ -82,10 +82,10 @@ func parseRequestBody(req *http.Request, maxRequestSize int64) (map[string]inter
 	body, err := io.ReadAll(req.Body)
 	if err != nil {
 		if err.Error() == "http: request body too large" {
-			errMsg := fmt.Sprintf("request size exceed Service.MaxRequestSize(%d)", maxRequestSize)
+			errMsg := fmt.Sprintf("请求大小超出 Service.MaxRequestSize(%d)", maxRequestSize)
 			return nil, errors.NewCommonEdgeX(errors.KindLimitExceeded, errMsg, err)
 		}
-		return nil, errors.NewCommonEdgeX(errors.KindServerError, "failed to read request body", err)
+		return nil, errors.NewCommonEdgeX(errors.KindServerError, "读取请求失败", err)
 	}
 
 	var paramMap = make(map[string]interface{})
@@ -104,7 +104,7 @@ func parseRequestBody(req *http.Request, maxRequestSize int64) (map[string]inter
 func filterQueryParams(queryParams string) (string, url.Values, errors.EdgeX) {
 	m, err := url.ParseQuery(queryParams)
 	if err != nil {
-		edgexErr := errors.NewCommonEdgeX(errors.KindServerError, "failed to parse query parameter", err)
+		edgexErr := errors.NewCommonEdgeX(errors.KindServerError, "解析 URL 请求参数失败", err)
 		return "", nil, edgexErr
 	}
 

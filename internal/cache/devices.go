@@ -80,7 +80,7 @@ func (d *deviceCache) Add(device models.Device) errors.EdgeX {
 
 func (d *deviceCache) add(device models.Device) errors.EdgeX {
 	if _, ok := d.deviceMap[device.Name]; ok {
-		errMsg := fmt.Sprintf("Device %s has already existed in cache", device.Name)
+		errMsg := fmt.Sprintf("设备 %s 已在缓存中存在", device.Name)
 		return errors.NewCommonEdgeX(errors.KindDuplicateName, errMsg, nil)
 	}
 
@@ -110,7 +110,7 @@ func (d *deviceCache) RemoveByName(name string) errors.EdgeX {
 func (d *deviceCache) removeByName(name string) errors.EdgeX {
 	_, ok := d.deviceMap[name]
 	if !ok {
-		errMsg := fmt.Sprintf("failed to find Device %s in cache", name)
+		errMsg := fmt.Sprintf("缓存中查找设备 %s 失败", name)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 
@@ -123,7 +123,7 @@ func (d *deviceCache) removeByName(name string) errors.EdgeX {
 // updated directly to Core Metadata.
 func (d *deviceCache) UpdateAdminState(name string, state models.AdminState) errors.EdgeX {
 	if state != models.Locked && state != models.Unlocked {
-		return errors.NewCommonEdgeX(errors.KindContractInvalid, "invalid AdminState", nil)
+		return errors.NewCommonEdgeX(errors.KindContractInvalid, "不合法的 AdminState", nil)
 	}
 
 	d.mutex.Lock()
@@ -131,7 +131,7 @@ func (d *deviceCache) UpdateAdminState(name string, state models.AdminState) err
 
 	_, ok := d.deviceMap[name]
 	if !ok {
-		errMsg := fmt.Sprintf("failed to find Device %s in cache", name)
+		errMsg := fmt.Sprintf("缓存中查找设备 %s 失败", name)
 		return errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 	}
 
