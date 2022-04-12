@@ -70,7 +70,7 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > uint8(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值", maximum)
+			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case uint16:
@@ -80,7 +80,7 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > uint16(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值", maximum)
+			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case uint32:
@@ -90,7 +90,7 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > uint32(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值", maximum)
+			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case uint64:
@@ -100,7 +100,7 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > max {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值", maximum)
+			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int8:
@@ -110,7 +110,7 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > int8(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值", maximum)
+			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int16:
@@ -120,7 +120,7 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > int16(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值", maximum)
+			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int32:
@@ -130,7 +130,7 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > int32(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值", maximum)
+			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int64:
@@ -140,7 +140,7 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > max {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值", maximum)
+			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case float32:
@@ -150,7 +150,7 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > float32(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值", maximum)
+			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case float64:
@@ -160,7 +160,7 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > max {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值", maximum)
+			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	}
