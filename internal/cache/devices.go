@@ -123,7 +123,7 @@ func (d *deviceCache) removeByName(name string) errors.EdgeX {
 // updated directly to Core Metadata.
 func (d *deviceCache) UpdateAdminState(name string, state models.AdminState) errors.EdgeX {
 	if state != models.Locked && state != models.Unlocked {
-		return errors.NewCommonEdgeX(errors.KindContractInvalid, "不合法的 AdminState", nil)
+		return errors.NewCommonEdgeX(errors.KindContractInvalid, "不合法的操作状态", nil)
 	}
 
 	d.mutex.Lock()

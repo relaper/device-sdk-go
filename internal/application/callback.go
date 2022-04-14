@@ -60,7 +60,7 @@ func AddDevice(addDeviceRequest requests.AddDeviceRequest, dic *di.Container) er
 	if err == nil {
 		lc.Debugf("Invoked driver.AddDevice callback for %s", device.Name)
 	} else {
-		errMsg := fmt.Sprintf("设备 %s driver.AddDevice 回调失败", device.Name)
+		errMsg := fmt.Sprintf("添加设备（%s）回调失败", device.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -109,7 +109,7 @@ func UpdateDevice(updateDeviceRequest requests.UpdateDeviceRequest, dic *di.Cont
 	if err == nil {
 		lc.Debugf("Invoked driver.UpdateDevice callback for %s", device.Name)
 	} else {
-		errMsg := fmt.Sprintf("设备 %s driver.UpdateDevice 回调失败", device.Name)
+		errMsg := fmt.Sprintf("更新设备（%s）回调失败", device.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -149,7 +149,7 @@ func DeleteDevice(name string, dic *di.Container) errors.EdgeX {
 	if err == nil {
 		lc.Debugf("Invoked driver.RemoveDevice callback for %s", device.Name)
 	} else {
-		errMsg := fmt.Sprintf("设备 %s driver.RemoveDevice 回调失败", device.Name)
+		errMsg := fmt.Sprintf("删除设备（%s）回调失败", device.Name)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 

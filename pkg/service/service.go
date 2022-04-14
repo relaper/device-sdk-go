@@ -203,7 +203,7 @@ func (s *DeviceService) selfRegister() errors.EdgeX {
 			req := requests.NewAddDeviceServiceRequest(dtos.FromDeviceServiceModelToDTO(localDeviceService))
 			idRes, err := s.edgexClients.DeviceServiceClient.Add(ctx, []requests.AddDeviceServiceRequest{req})
 			if err != nil {
-				s.LoggingClient.Errorf("failed to add device service %s: %v", localDeviceService.Name, err)
+				s.LoggingClient.Errorf("添加驱动 %s 失败: %v", localDeviceService.Name, err)
 				return err
 			}
 			s.deviceService.Id = idRes[0].Id

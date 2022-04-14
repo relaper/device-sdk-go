@@ -89,7 +89,7 @@ func TransformReadResult(cv *sdkModels.CommandValue, pv models.ResourcePropertie
 func transformBase(value interface{}, base string, read bool) (interface{}, errors.EdgeX) {
 	b, err := strconv.ParseFloat(base, 64)
 	if err != nil {
-		errMsg := fmt.Sprintf("the base value %s of PropertyValue cannot be parsed to float64", base)
+		errMsg := fmt.Sprintf(" %s 基数无法转换为浮点", base)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -124,7 +124,7 @@ func transformBase(value interface{}, base string, read bool) (interface{}, erro
 	}
 	inRange := checkTransformedValueInRange(value, valueFloat64)
 	if !inRange {
-		errMsg := fmt.Sprintf("转换数据值超出原始数据值 (%T) 范围", value)
+		errMsg := fmt.Sprintf("数值超出原始数据 (%T) 范围", value)
 		return 0, errors.NewCommonEdgeX(errors.KindOverflowError, errMsg, nil)
 	}
 
@@ -156,7 +156,7 @@ func transformBase(value interface{}, base string, read bool) (interface{}, erro
 func transformScale(value interface{}, scale string, read bool) (interface{}, errors.EdgeX) {
 	s, err := strconv.ParseFloat(scale, 64)
 	if err != nil {
-		errMsg := fmt.Sprintf("属性的缩放配置值 %s 无法转换为浮点", scale)
+		errMsg := fmt.Sprintf("属性缩放配置值 %s 无法转换为浮点", scale)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -191,7 +191,7 @@ func transformScale(value interface{}, scale string, read bool) (interface{}, er
 	}
 	inRange := checkTransformedValueInRange(value, valueFloat64)
 	if !inRange {
-		errMsg := fmt.Sprintf("转换数据值超出原始数据值 (%T) 范围", value)
+		errMsg := fmt.Sprintf("数值值超出原始数据 (%T) 范围", value)
 		return 0, errors.NewCommonEdgeX(errors.KindOverflowError, errMsg, nil)
 	}
 
@@ -263,7 +263,7 @@ func transformScale(value interface{}, scale string, read bool) (interface{}, er
 func transformOffset(value interface{}, offset string, read bool) (interface{}, errors.EdgeX) {
 	o, err := strconv.ParseFloat(offset, 64)
 	if err != nil {
-		errMsg := fmt.Sprintf("属性的偏移配置值 %s 无法转换为浮点", offset)
+		errMsg := fmt.Sprintf("属性偏移配置值 %s 无法转换为浮点", offset)
 		return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 	}
 
@@ -298,7 +298,7 @@ func transformOffset(value interface{}, offset string, read bool) (interface{}, 
 	}
 	inRange := checkTransformedValueInRange(value, valueFloat64)
 	if !inRange {
-		errMsg := fmt.Sprintf("转换数据值超出原始数据值 (%T) 范围", value)
+		errMsg := fmt.Sprintf("数值超出原始数据 (%T) 范围", value)
 		return 0, errors.NewCommonEdgeX(errors.KindOverflowError, errMsg, nil)
 	}
 
@@ -372,28 +372,28 @@ func transformReadMask(value interface{}, mask string) (interface{}, errors.Edge
 	case uint8:
 		m, err := strconv.ParseUint(mask, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性的mask配置值 %s 无法转换为 %T", mask, v)
+			errMsg := fmt.Sprintf("属性mask配置值 %s 无法转换为 %T", mask, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		value = v & uint8(m)
 	case uint16:
 		m, err := strconv.ParseUint(mask, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性的mask配置值 %s 无法转换为 %T", mask, v)
+			errMsg := fmt.Sprintf("属性mask配置值 %s 无法转换为 %T", mask, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		value = v & uint16(m)
 	case uint32:
 		m, err := strconv.ParseUint(mask, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性的mask配置值 %s 无法转换为 %T", mask, v)
+			errMsg := fmt.Sprintf("属性mask配置值 %s 无法转换为 %T", mask, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		value = v & uint32(m)
 	case uint64:
 		m, err := strconv.ParseUint(mask, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性的mask配置值 %s 无法转换为 %T", mask, v)
+			errMsg := fmt.Sprintf("属性mask配置值 %s 无法转换为 %T", mask, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		value = v & m
@@ -407,7 +407,7 @@ func transformReadShift(value interface{}, shift string) (interface{}, errors.Ed
 	case uint8:
 		s, err := strconv.ParseInt(shift, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性的位移配置值 %s 无法转换为 %T", shift, v)
+			errMsg := fmt.Sprintf("属性位移配置值 %s 无法转换为 %T", shift, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if s > 0 {
@@ -418,7 +418,7 @@ func transformReadShift(value interface{}, shift string) (interface{}, errors.Ed
 	case uint16:
 		s, err := strconv.ParseInt(shift, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性的位移配置值 %s 无法转换为 %T", shift, v)
+			errMsg := fmt.Sprintf("属性位移配置值 %s 无法转换为 %T", shift, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if s > 0 {
@@ -429,7 +429,7 @@ func transformReadShift(value interface{}, shift string) (interface{}, errors.Ed
 	case uint32:
 		s, err := strconv.ParseInt(shift, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性的位移配置值 %s 无法转换为 %T", shift, v)
+			errMsg := fmt.Sprintf("属性位移配置值 %s 无法转换为 %T", shift, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if s > 0 {
@@ -440,7 +440,7 @@ func transformReadShift(value interface{}, shift string) (interface{}, errors.Ed
 	case uint64:
 		s, err := strconv.ParseInt(shift, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性的位移配置值 %s 无法转换为 %T", shift, v)
+			errMsg := fmt.Sprintf("属性位移配置值 %s 无法转换为 %T", shift, v)
 			return value, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if s > 0 {
@@ -508,7 +508,7 @@ func commandValueForTransform(cv *sdkModels.CommandValue) (interface{}, errors.E
 			return 0, errors.NewCommonEdgeXWrapper(err)
 		}
 	default:
-		return nil, errors.NewCommonEdgeX(errors.KindServerError, "不支持转换的数值类型", nil)
+		return nil, errors.NewCommonEdgeX(errors.KindServerError, "不支持的数值类型", nil)
 	}
 	return v, nil
 }

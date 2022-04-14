@@ -199,7 +199,7 @@ func (p *profileCache) ResourceOperation(profileName string, resourceName string
 		}
 	}
 
-	errMsg := fmt.Sprintf("failed to find ResourceOpertaion with DeviceResource %s in Profile %s", resourceName, profileName)
+	errMsg := fmt.Sprintf("模型 %s 属性 %s 不支持读写", profileName, resourceName)
 	return models.ResourceOperation{}, errors.NewCommonEdgeX(errors.KindEntityDoesNotExist, errMsg, nil)
 }
 

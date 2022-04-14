@@ -90,7 +90,7 @@ func LoadProfiles(path string, dic *di.Container) errors.EdgeX {
 			if !exist {
 				err = cache.Profiles().Add(dtos.ToDeviceProfileModel(res.Profile))
 				if err != nil {
-					return errors.NewCommonEdgeX(errors.KindServerError, fmt.Sprintf("failed to cache the profile %s", res.Profile.Name), err)
+					return errors.NewCommonEdgeX(errors.KindServerError, fmt.Sprintf("缓存模型 %s 失败", res.Profile.Name), err)
 				}
 			}
 		} else {

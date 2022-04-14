@@ -75,7 +75,7 @@ func (s *DeviceService) RemoveDeviceProfileByName(name string) error {
 	ctx := context.WithValue(context.Background(), common.CorrelationHeader, uuid.NewString())
 	_, err := s.edgexClients.DeviceProfileClient.DeleteByName(ctx, name)
 	if err != nil {
-		s.LoggingClient.Errorf("在核心元数据服务删除模型 %s 失败", name)
+		s.LoggingClient.Errorf("核心元数据服务删除模型 %s 失败", name)
 		return err
 	}
 
@@ -98,7 +98,7 @@ func (s *DeviceService) UpdateDeviceProfile(profile models.DeviceProfile) error 
 	ctx := context.WithValue(context.Background(), common.CorrelationHeader, uuid.NewString())
 	_, err := s.edgexClients.DeviceProfileClient.Update(ctx, []requests.DeviceProfileRequest{req})
 	if err != nil {
-		s.LoggingClient.Errorf("在核心元数据服务 %s 更新模型失败: %v", profile.Name, err)
+		s.LoggingClient.Errorf("核心元数据服务 %s 更新模型失败: %v", profile.Name, err)
 		return err
 	}
 

@@ -45,7 +45,7 @@ type CommandValue struct {
 func NewCommandValue(deviceResourceName string, valueType string, value interface{}) (*CommandValue, error) {
 	err := validate(valueType, value)
 	if err != nil {
-		return nil, errors.NewCommonEdgeX(errors.KindServerError, "创建CommandValue失败", err)
+		return nil, errors.NewCommonEdgeX(errors.KindServerError, "创建命令值失败", err)
 	}
 
 	return &CommandValue{
@@ -530,7 +530,7 @@ func validate(valueType string, value interface{}) error {
 	}
 
 	if !ok {
-		errMsg := fmt.Sprintf("无法将 interface 数值 %v 为 %s类型", value, valueType)
+		errMsg := fmt.Sprintf("无法将 interface 数值 %v 转换 %s类型", value, valueType)
 		return errors.NewCommonEdgeX(errors.KindServerError, errMsg, nil)
 	}
 	return nil

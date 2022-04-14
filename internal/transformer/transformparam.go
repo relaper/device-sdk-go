@@ -66,101 +66,101 @@ func validateWriteMaximum(value interface{}, maximum string) errors.EdgeX {
 	case uint8:
 		max, err := strconv.ParseUint(maximum, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最大值 %s 无法转换为 %T", maximum, v)
+			errMsg := fmt.Sprintf("属性最大值配置 %s 无法转换为 %T", maximum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > uint8(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
+			errMsg := fmt.Sprintf("超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case uint16:
 		max, err := strconv.ParseUint(maximum, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最大值 %s 无法转换为 %T", maximum, v)
+			errMsg := fmt.Sprintf("属性最大值配置 %s 无法转换为 %T", maximum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > uint16(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
+			errMsg := fmt.Sprintf("超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case uint32:
 		max, err := strconv.ParseUint(maximum, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最大值 %s 无法转换为 %T", maximum, v)
+			errMsg := fmt.Sprintf("属性最大值配置 %s 无法转换为 %T", maximum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > uint32(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
+			errMsg := fmt.Sprintf("超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case uint64:
 		max, err := strconv.ParseUint(maximum, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最大值 %s 无法转换为 %T", maximum, v)
+			errMsg := fmt.Sprintf("属性最大值配置 %s 无法转换为 %T", maximum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > max {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
+			errMsg := fmt.Sprintf("超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int8:
 		max, err := strconv.ParseInt(maximum, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最大值 %s 无法转换为 %T", maximum, v)
+			errMsg := fmt.Sprintf("属性最大值配置 %s 无法转换为 %T", maximum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > int8(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
+			errMsg := fmt.Sprintf("超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int16:
 		max, err := strconv.ParseInt(maximum, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最大值 %s 无法转换为 %T", maximum, v)
+			errMsg := fmt.Sprintf("属性最大值配置 %s 无法转换为 %T", maximum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > int16(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
+			errMsg := fmt.Sprintf("超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int32:
 		max, err := strconv.ParseInt(maximum, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最大值 %s 无法转换为 %T", maximum, v)
+			errMsg := fmt.Sprintf("属性最大值配置 %s 无法转换为 %T", maximum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > int32(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
+			errMsg := fmt.Sprintf("超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int64:
 		max, err := strconv.ParseInt(maximum, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最大值 %s 无法转换为 %T", maximum, v)
+			errMsg := fmt.Sprintf("属性最大值配置 %s 无法转换为 %T", maximum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > max {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
+			errMsg := fmt.Sprintf("超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case float32:
 		max, err := strconv.ParseFloat(maximum, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最大值 %s 无法转换为 %T", maximum, v)
+			errMsg := fmt.Sprintf("属性最大值配置 %s 无法转换为 %T", maximum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > float32(max) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
+			errMsg := fmt.Sprintf("超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case float64:
 		max, err := strconv.ParseFloat(maximum, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最大值 %s 无法转换为 %T", maximum, v)
+			errMsg := fmt.Sprintf("属性最大值配置 %s 无法转换为 %T", maximum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v > max {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最大值: %s", maximum)
+			errMsg := fmt.Sprintf("超出属性最大值: %s", maximum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	}
@@ -172,101 +172,101 @@ func validateWriteMinimum(value interface{}, minimum string) errors.EdgeX {
 	case uint8:
 		min, err := strconv.ParseUint(minimum, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最小值 %s 无法转换为 %T", minimum, v)
+			errMsg := fmt.Sprintf("属性最小配置 %s 无法转换为 %T", minimum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v < uint8(min) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最小值", minimum)
+			errMsg := fmt.Sprintf("超出属性最小值：%s", minimum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case uint16:
 		min, err := strconv.ParseUint(minimum, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最小值 %s 无法转换为 %T", minimum, v)
+			errMsg := fmt.Sprintf("属性最小配置 %s 无法转换为 %T", minimum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v < uint16(min) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最小值", minimum)
+			errMsg := fmt.Sprintf("超出属性最小值：%s", minimum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case uint32:
 		min, err := strconv.ParseUint(minimum, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最小值 %s 无法转换为 %T", minimum, v)
+			errMsg := fmt.Sprintf("属性最小配置 %s 无法转换为 %T", minimum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v < uint32(min) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最小值", minimum)
+			errMsg := fmt.Sprintf("超出属性最小值：%s", minimum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case uint64:
 		min, err := strconv.ParseUint(minimum, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最小值 %s 无法转换为 %T", minimum, v)
+			errMsg := fmt.Sprintf("属性最小配置 %s 无法转换为 %T", minimum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v < min {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最小值", minimum)
+			errMsg := fmt.Sprintf("超出属性最小值：%s", minimum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int8:
 		min, err := strconv.ParseInt(minimum, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最小值 %s 无法转换为 %T", minimum, v)
+			errMsg := fmt.Sprintf("属性最小配置 %s 无法转换为 %T", minimum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v < int8(min) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最小值", minimum)
+			errMsg := fmt.Sprintf("超出属性最小值：%s", minimum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int16:
 		min, err := strconv.ParseInt(minimum, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最小值 %s 无法转换为 %T", minimum, v)
+			errMsg := fmt.Sprintf("属性最小配置 %s 无法转换为 %T", minimum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v < int16(min) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最小值", minimum)
+			errMsg := fmt.Sprintf("超出属性最小值：%s", minimum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int32:
 		min, err := strconv.ParseInt(minimum, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最小值 %s 无法转换为 %T", minimum, v)
+			errMsg := fmt.Sprintf("属性最小配置 %s 无法转换为 %T", minimum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v < int32(min) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最小值", minimum)
+			errMsg := fmt.Sprintf("超出属性最小值：%s", minimum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case int64:
 		min, err := strconv.ParseInt(minimum, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最小值 %s 无法转换为 %T", minimum, v)
+			errMsg := fmt.Sprintf("属性最小配置 %s 无法转换为 %T", minimum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v < min {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最小值", minimum)
+			errMsg := fmt.Sprintf("超出属性最小值：%s", minimum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case float32:
 		min, err := strconv.ParseFloat(minimum, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最小值 %s 无法转换为 %T", minimum, v)
+			errMsg := fmt.Sprintf("属性最小配置 %s 无法转换为 %T", minimum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v < float32(min) {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最小值", minimum)
+			errMsg := fmt.Sprintf("超出属性最小值：%s", minimum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	case float64:
 		min, err := strconv.ParseFloat(minimum, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("属性配置的最小值 %s 无法转换为 %T", minimum, v)
+			errMsg := fmt.Sprintf("属性最小配置 %s 无法转换为 %T", minimum, v)
 			return errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		if v < min {
-			errMsg := fmt.Sprintf("设置命令参数值超出属性最小值", minimum)
+			errMsg := fmt.Sprintf("超出属性最小值：%s", minimum)
 			return errors.NewCommonEdgeX(errors.KindContractInvalid, errMsg, nil)
 		}
 	}
