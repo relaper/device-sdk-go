@@ -292,8 +292,8 @@ github.com/prometheus/procfs v0.6.0/go.mod h1:cz+aTbrPOrUb4q7XlbU9ygM+/jj0fzG6c1
 github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a/go.mod h1:bCqnVzQkZxMG4s8nGwiZ5l3QUCyqpo9Y+/ZMZ9VjZe4=
 github.com/relaper/go-mod-bootstrap/v2 v2.1.0 h1:pVFWgyrDxTUHtTl1tbcP5vVvYJReMrOwR4FE9PxU6Gc=
 github.com/relaper/go-mod-bootstrap/v2 v2.1.0/go.mod h1:+ZXclfGAK0PAyJ4RygGB7R2R6IyoRN0qzsQpOsfClvA=
-github.com/relaper/go-mod-core-contracts/v2 v2.1.1-0.20220330084450-850cb2f9c4e3 h1:fgJyUS+07WJQ5sLeZaN9zn8GjDNTtyWfIjbdZzNrVG0=
-github.com/relaper/go-mod-core-contracts/v2 v2.1.1-0.20220330084450-850cb2f9c4e3/go.mod h1:I6UhBPCREubcU0ouIGBdZlNG5Xx4NijUVN5rvEtD03k=
+github.com/relaper/go-mod-core-contracts/v2 v2.1.1-0.20220415091200-7d6fb82878d4 h1:aUBx+5PxO0LQChPMSORQ0jthA6nMAiNDbJoavzRYGFU=
+github.com/relaper/go-mod-core-contracts/v2 v2.1.1-0.20220415091200-7d6fb82878d4/go.mod h1:I6UhBPCREubcU0ouIGBdZlNG5Xx4NijUVN5rvEtD03k=
 github.com/relaper/go-mod-messaging/v2 v2.0.0-20220211004505-a047410c78d7 h1:T0FUMZQJS/jDmXyusZPWPF0An/yVf7dZigh+Sl5NSoc=
 github.com/relaper/go-mod-messaging/v2 v2.0.0-20220211004505-a047410c78d7/go.mod h1:NS9LGM37KCmqvX833hJEtSPaQSUVkm6vze5Wh/t1klc=
 github.com/rogpeppe/fastuuid v1.2.0/go.mod h1:jVj6XXZzXRy/MSR5jhDC/2q6DgLz+nrA6LYCDYWNEvQ=

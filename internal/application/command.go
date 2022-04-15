@@ -152,7 +152,7 @@ func (c *CommandProcessor) ReadDeviceResource() (res *dtos.Event, e errors.EdgeX
 	// convert CommandValue to Event
 	res, e = transformer.CommandValuesToEventDTO(results, c.device.Name, dr.Name, c.dic)
 	if e != nil {
-		return res, errors.NewCommonEdgeX(errors.KindServerError, "转换命令值为事件失败", e)
+		return res, e
 	}
 
 	return
@@ -212,7 +212,7 @@ func (c *CommandProcessor) ReadDeviceCommand() (res *dtos.Event, e errors.EdgeX)
 	// convert CommandValue to Event
 	res, e = transformer.CommandValuesToEventDTO(results, c.device.Name, dc.Name, c.dic)
 	if e != nil {
-		return res, errors.NewCommonEdgeX(errors.KindServerError, "转换命令未事件失败", e)
+		return res, e
 	}
 
 	return
@@ -265,9 +265,8 @@ func (c *CommandProcessor) WriteDeviceResource() (e errors.EdgeX) {
 	// transform write value
 	configuration := container.ConfigurationFrom(c.dic.Get)
 	if configuration.Device.DataTransform {
-		e = transformer.TransformWriteParameter(cv, dr.Properties)
-		if e != nil {
-			return errors.NewCommonEdgeX(errors.KindContractInvalid, "转换设置参数失败", e)
+		if e = transformer.TransformWriteParameter(cv, dr.Properties); e != nil {
+			return e
 		}
 	}
 
@@ -343,7 +342,7 @@ func (c *CommandProcessor) WriteDeviceCommand() errors.EdgeX {
 		if err == nil {
 			cvs = append(cvs, cv)
 		} else {
-			return errors.NewCommonEdgeX(errors.KindServerError, "创建命令值失败", err)
+			return err
 		}
 	}
 
@@ -366,7 +365,7 @@ func (c *CommandProcessor) WriteDeviceCommand() errors.EdgeX {
 		if configuration.Device.DataTransform {
 			err := transformer.TransformWriteParameter(cv, dr.Properties)
 			if err != nil {
-				return errors.NewCommonEdgeX(errors.KindContractInvalid, "转换设置参数失败", err)
+				return err
 			}
 		}
 	}
@@ -437,7 +436,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n uint64
 		n, err = strconv.ParseUint(v, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeUint8, uint8(n))
@@ -447,7 +446,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		for _, u := range strArr {
 			n, err := strconv.ParseUint(strings.Trim(u, " "), 10, 8)
 			if err != nil {
-				errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+				errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 				return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 			}
 			arr = append(arr, uint8(n))
@@ -457,7 +456,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n uint64
 		n, err = strconv.ParseUint(v, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeUint16, uint16(n))
@@ -467,7 +466,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		for _, u := range strArr {
 			n, err := strconv.ParseUint(strings.Trim(u, " "), 10, 16)
 			if err != nil {
-				errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+				errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 				return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 			}
 			arr = append(arr, uint16(n))
@@ -477,7 +476,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n uint64
 		n, err = strconv.ParseUint(v, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeUint32, uint32(n))
@@ -487,7 +486,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		for _, u := range strArr {
 			n, err := strconv.ParseUint(strings.Trim(u, " "), 10, 32)
 			if err != nil {
-				errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+				errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 				return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 			}
 			arr = append(arr, uint32(n))
@@ -497,7 +496,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n uint64
 		n, err = strconv.ParseUint(v, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeUint64, n)
@@ -507,7 +506,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		for _, u := range strArr {
 			n, err := strconv.ParseUint(strings.Trim(u, " "), 10, 64)
 			if err != nil {
-				errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+				errMsg := fmt.Sprintf("'%s'不是%s 类型或超出范围", v, dr.Properties.ValueType)
 				return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 			}
 			arr = append(arr, n)
@@ -517,7 +516,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n int64
 		n, err = strconv.ParseInt(v, 10, 8)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt8, int8(n))
@@ -525,7 +524,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []int8
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt8Array, arr)
@@ -533,7 +532,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n int64
 		n, err = strconv.ParseInt(v, 10, 16)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt16, int16(n))
@@ -541,7 +540,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []int16
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt16Array, arr)
@@ -549,7 +548,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n int64
 		n, err = strconv.ParseInt(v, 10, 32)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt32, int32(n))
@@ -557,7 +556,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []int32
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt32Array, arr)
@@ -565,7 +564,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var n int64
 		n, err = strconv.ParseInt(v, 10, 64)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt64, n)
@@ -573,7 +572,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []int64
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeInt64Array, arr)
@@ -607,7 +606,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []float32
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeFloat32Array, arr)
@@ -640,7 +639,7 @@ func createCommandValueFromDeviceResource(dr models.DeviceResource, value interf
 		var arr []float64
 		err = json.Unmarshal([]byte(v), &arr)
 		if err != nil {
-			errMsg := fmt.Sprintf("'%s' 不是 %s 类型", v, dr.Properties.ValueType)
+			errMsg := fmt.Sprintf("'%s' 不是%s类型或超出范围", v, dr.Properties.ValueType)
 			return result, errors.NewCommonEdgeX(errors.KindServerError, errMsg, err)
 		}
 		result, err = sdkModels.NewCommandValue(dr.Name, common.ValueTypeFloat64Array, arr)

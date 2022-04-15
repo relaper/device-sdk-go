@@ -16,8 +16,8 @@ require (
 
 go 1.16
 
-replace github.com/edgexfoundry/go-mod-core-contracts/v2 v2.1.0 => github.com/relaper/go-mod-core-contracts/v2 v2.1.1-0.20220330084450-850cb2f9c4e3
+replace github.com/edgexfoundry/go-mod-messaging/v2 v2.1.0 => github.com/relaper/go-mod-messaging/v2 v2.0.0-20220211004505-a047410c78d7
+
+replace github.com/edgexfoundry/go-mod-core-contracts/v2 v2.1.0 => github.com/relaper/go-mod-core-contracts/v2 v2.1.1-0.20220415091200-7d6fb82878d4
 
 replace github.com/edgexfoundry/go-mod-bootstrap/v2 v2.1.0 => github.com/relaper/go-mod-bootstrap/v2 v2.1.0
-
-replace github.com/edgexfoundry/go-mod-messaging/v2 v2.1.0 => github.com/relaper/go-mod-messaging/v2 v2.0.0-20220211004505-a047410c78d7
